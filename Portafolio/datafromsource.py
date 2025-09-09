@@ -49,3 +49,16 @@ class DataFromSource():
                 return None
         else:
             return None
+
+    def get_returns(self):
+        prices = self.get_prices()
+        if prices is not None:
+            try:
+                prices['returns'] = np.log(prices[f"{self.RIC}"].div(prices[f"{self.RIC}"].shift(1)))
+                returns = prices.drop([f"{self.RIC}"], axis=1).rename(columns={'returns': f"{self.RIC}"})
+                return returns
+            except Exception as e:
+                print(f"Error calculating returns for {self.RIC}: {e}")
+                return None
+        else:
+            return None
